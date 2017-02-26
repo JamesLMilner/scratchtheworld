@@ -1,11 +1,10 @@
 <!-- Load the Polymer.Element base class -->
 <link rel="import" href="bower_components/polymer/polymer-element.html">
-<link rel="stylesheet" href="bower_components/leaflet/dist/leaflet.css"></link>
 <script src="bower_components/leaflet/dist/leaflet.js"></script>
 
 <dom-module id="scratch-map">
   <template>
-
+    <link rel="stylesheet" href="bower_components/leaflet/dist/leaflet.css"></link>
     <!-- Styles MUST be inside template -->
     <style>
 
@@ -43,6 +42,7 @@
 
       connectedCallback() {
         super.connectedCallback();
+        setTimeout( () => {
         this.visitedCountries = 0;
         this.countryCodes = [];
 
@@ -65,6 +65,8 @@
         L.control.attribution({position: "topright"} ).addTo(this.map)
         this.addOSMBasemapLayer();
         this.addCountriesLayer();
+        }, 2000)
+        
       } 
 
       addOSMBasemapLayer() {
