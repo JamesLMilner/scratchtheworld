@@ -15,23 +15,40 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
 
   <title>map demo</title>
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet"> 
   <style> 
     html, body { 
+      font-family: 'Lato', sans-serif;
       width: 100%;
       height: 100%;
       margin: 0px;
       padding: 0px;
+
     }
+    country-counter {
+      position: absolute;
+      bottom: 0;
+      font-size: 2rem;
+      z-index: 100000;
+      color: black;
+      width: 100%;
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+      background-color: rgba(255,255,255,0.8);
+    }
+
   </style>
   <script src="bower_components/leaflet/dist/leaflet.js"></script>
   <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="stylesheet" href="bower_components/leaflet/dist/leaflet.css"></link>
   <link rel="import" href="map.html">
+  <link rel="import" href="country-counter.html">
 
 </head>
 
 <body>
   <scratch-map>
   </scratch-map>
+  <country-counter></country-counter>
 </body>
 </html>
