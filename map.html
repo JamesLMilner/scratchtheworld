@@ -78,7 +78,7 @@
       
        layer.on('click', (event) => {
           const countryFeature = event.target;
-          const countryCode = feature.properties.ISO_A3; 
+          const countryCode = feature.properties.ADMIN; 
           const visited = this.getVisited(countryCode);
           
           if (visited === false || visited === null) {
@@ -98,7 +98,7 @@
       }
 
       styleFeature(feature, layer) {
-        const visited = this.getVisited(feature.properties.ISO_A3);
+        const visited = this.getVisited(feature.properties.ADMIN);
         if (visited === false || visited === null) {
             return this.countriesStyle; 
           } else {
@@ -128,7 +128,7 @@
             this.totalCountries = countries.features.length;
 
             countries.features.forEach( (feature) => {
-             this.countryCodes.push(feature.properties.ISO_A3);
+             this.countryCodes.push(feature.properties.ADMIN);
             })
 
             this.emitVisitedChange();
