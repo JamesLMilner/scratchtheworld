@@ -120,20 +120,19 @@
         fetch("countries-simple.geojson").then((geojson) => {
           geojson.json().then((countries) => {
 
-             L.geoJson(countries,    {
-               style: this.styleFeature.bind(this),
-               onEachFeature: this.onEachCountryFeature.bind(this)
-             }).addTo(this.map);
+            L.geoJson(countries,    {
+              style: this.styleFeature.bind(this),
+              onEachFeature: this.onEachCountryFeature.bind(this)
+            }).addTo(this.map);
          
-
             this.totalCountries = countries.features.length;
 
-             countries.features.forEach( (feature) => {
-               this.countryCodes.push(feature.properties.ISO_A3);
-             })
+            countries.features.forEach( (feature) => {
+             this.countryCodes.push(feature.properties.ISO_A3);
+            })
 
-             this.emitVisitedChange();
-             this.emitTotalChange();
+            this.emitVisitedChange();
+            this.emitTotalChange();
     
             console.debug("Total Countries", this.totalCountries);
 
@@ -156,16 +155,12 @@
       getVisited(countryCode) {
         const visited = localStorage.getItem(countryCode);
         if (visited === "true") {
-     
           return true
         } else {
-       
           return false
         }
       }
-
-
-
+      
       setVisited(countryCode, hasVisited) {
         localStorage.setItem(countryCode, hasVisited);
       }
