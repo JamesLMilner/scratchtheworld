@@ -1,7 +1,7 @@
 {
-  "name": "polymer-2-carousel",
+  "name": "scratchmap",
   "private": true,
   "dependencies": {
-    "polymer": "Polymer/polymer#2.0-preview"
+    "polymer": "Polymer/polymer#^2.0.1"
   }
 }
