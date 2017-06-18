@@ -10,12 +10,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 'use strict';
 
-import {removeCustomPropAssignment, StyleNode} from './css-parse' // eslint-disable-line no-unused-vars
-import {nativeShadow} from './style-settings'
-import StyleTransformer from './style-transformer'
-import * as StyleUtil from './style-util'
-import * as RX from './common-regex'
-import StyleInfo from './style-info'
+import {removeCustomPropAssignment, StyleNode} from './css-parse.js' // eslint-disable-line no-unused-vars
+import {nativeShadow} from './style-settings.js'
+import StyleTransformer from './style-transformer.js'
+import * as StyleUtil from './style-util.js'
+import * as RX from './common-regex.js'
+import StyleInfo from './style-info.js'
 
 // TODO: dedupe with shady
 /**
@@ -303,7 +303,7 @@ class StyleProperties {
       return;
     }
     let {is, typeExtension} = StyleUtil.getIsExtends(scope);
-    let hostScope = scope.is ?
+    let hostScope = is ?
       StyleTransformer._calcHostScope(is, typeExtension) :
       'html';
     let parsedSelector = rule['parsedSelector'];
@@ -545,9 +545,13 @@ class StyleProperties {
         }
       // shady and cache hit but not in document
       } else if (!style.parentNode) {
+        if (IS_IE && cssText.indexOf('@media') > -1) {
+            // @media rules may be stale in IE 10 and 11
+            // refresh the text content of the style to revalidate them.
+          style.textContent = cssText;
+        }
         StyleUtil.applyStyle(style, null, styleInfo.placeholder);
       }
-
     }
     // ensure this style is our custom style and increment its use count.
     if (style) {
@@ -557,10 +561,6 @@ class StyleProperties {
         style['_useCount']++;
       }
       styleInfo.customStyle = style;
-    }
-    // @media rules may be stale in IE 10 and 11
-    if (IS_IE) {
-      style.textContent = style.textContent;
     }
     return style;
   }
