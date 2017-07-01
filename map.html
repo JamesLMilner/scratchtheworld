@@ -36,6 +36,7 @@
           scratchedCountriesStyle: null,
           totalVisited: 0,
           totalCountries: 0,
+          visitedCountriesList: [],
           countryCodes: [],
         };
       }
@@ -45,6 +46,7 @@
         setTimeout( () => {
         this.visitedCountries = 0;
         this.countryCodes = [];
+        this.visitedCountriesList = [];
 
         const mapEl = this.$.map;
         this.countriesStyle = { 
@@ -65,6 +67,7 @@
         L.control.attribution({position: "topright"} ).addTo(this.map)
         this.addOSMBasemapLayer();
         this.addCountriesLayer();
+
         }, 2000)
         
       } 
@@ -139,6 +142,7 @@
             this.emitTotalChange();
     
             console.debug("Total Countries", this.totalCountries);
+            this.getUrl()
 
           });
         });
@@ -156,6 +160,12 @@
         }));
       }
 
+      emitUrlChange() {
+        document.dispatchEvent(new CustomEvent('visitedUrl', {
+            detail : { url: this.getUrl() } 
+        }));
+      }
+
       getVisited(countryCode) {
         const visited = localStorage.getItem(countryCode);
         if (visited === "true") {
@@ -168,6 +178,22 @@
       setVisited(countryCode, hasVisited) {
         localStorage.setItem(countryCode, hasVisited);
       }
+
+      getVisitedList() {
+        this.countryCodes.forEach( (code) => {
+          if (this.getVisited(code)) {
+            this.visitedCountriesList.push(code);
+          } 
+        });
+        return JSON.stringify(this.visitedCountriesList);
+      }
+
+      getUrl() {
+        var url = window.location.href.split('?')[0] 
+        url += '?countryCodes=' + this.getVisitedList()
+        console.log(url);
+      }
+
 
     }
 

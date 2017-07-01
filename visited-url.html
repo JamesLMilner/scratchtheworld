@@ -1,0 +1,56 @@
+<!-- Load the Polymer.Element base class -->
+<link rel="import" href="bower_components/polymer/polymer-element.html">
+
+<dom-module id="visited-url">
+  <template>
+
+    <!-- Styles MUST be inside template -->
+    <style>
+
+      #visited-url {
+        width: 100px;
+        height: 100%;
+        text-align: center;
+        margin: 0;
+      }
+   
+    </style>
+
+    <div id="visited-url">
+      <strong>Share:</strong>
+       <div> [[url]] </div>
+    </div>
+
+  </template>
+
+  <script>
+
+    // Extend Polymer.Element base class
+    class VisitedUrl extends Polymer.Element {
+
+      static get is() { return 'visited-url' }
+
+      static get config() {
+        // properties, observers meta data
+        return {
+            url : "lol",
+        };
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+        document.addEventListener('visitedUrl', this.setUrl.bind(this));
+      } 
+
+      setUrl(data) {
+        console.log(data.url);
+        this.url = data.url;
+      }
+
+    }
+
+    // Register custom element definition using standard platform API
+    customElements.define(CountryCounter.is, CountryCounter);
+
+  </script>
+</dom-module>
