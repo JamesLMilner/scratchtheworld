@@ -1,5 +1,6 @@
 {
   "name": "webcomponentsjs",
+  "description": "Web components polyfill",
   "main": "webcomponents.js",
   "homepage": "http://webcomponents.org",
   "authors": [
@@ -10,27 +11,31 @@
     "url": "https://github.com/webcomponents/webcomponentsjs.git"
   },
   "keywords": [
-    "webcomponents"
+    "webcomponents",
+    "web-components",
+    "polyfill",
+    "shim"
   ],
-  "license": "BSD",
+  "license": "BSD-3-Clause",
   "ignore": [],
   "devDependencies": {
-    "web-component-tester": "^5",
-    "custom-elements": "webcomponents/custom-elements#master",
+    "web-component-tester": "^v6.0.0-prerelease.10",
+    "custom-elements": "webcomponents/custom-elements#^v1.0.0",
     "es6-promise": "stefanpenner/es6-promise#^4.0.0",
-    "html-imports": "webcomponents/html-imports#master",
-    "shadydom": "webcomponents/shadydom#master",
-    "shadycss": "webcomponents/shadycss#master",
-    "template": "webcomponents/template#master",
-    "webcomponents-platform": "webcomponents/webcomponents-platform#master"
+    "html-imports": "webcomponents/html-imports#^v1.0.0",
+    "shadydom": "webcomponents/shadydom#^v1.0.0",
+    "shadycss": "webcomponents/shadycss#^v1.0.0",
+    "template": "webcomponents/template#^v1.0.0",
+    "webcomponents-platform": "webcomponents/webcomponents-platform#^v1.0.0"
   },
-  "_release": "632ae2e0e4",
+  "version": "1.0.1",
+  "_release": "1.0.1",
   "_resolution": {
-    "type": "branch",
-    "branch": "v1",
-    "commit": "632ae2e0e48c3c10ca1e881272a4cf28493aa5dc"
+    "type": "version",
+    "tag": "v1.0.1",
+    "commit": "1c3a4564796c66b2427dcd15618867b5a44edfac"
   },
   "_source": "https://github.com/Polymer/webcomponentsjs.git",
-  "_target": "v1",
+  "_target": "^v1.0.0",
   "_originalSource": "webcomponentsjs"
 }

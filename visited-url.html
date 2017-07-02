@@ -7,6 +7,10 @@
     <!-- Styles MUST be inside template -->
     <style>
 
+      #url {
+        user-select: all;
+      }
+
       #visited-url {
         width: 100px;
         height: 100%;
@@ -53,7 +57,7 @@
 
     <div id="visited-url">
       <strong>Share:</strong>
-      <input id="url" readonly="readonly" value="[[url]]">
+      <input id="url" readonly="readonly" onclick="this.select()" value="[[url]]">
     </div>
     <button id="refresh-button" on-click="refreshPage"> Create your own! </button>
 
