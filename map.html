@@ -43,32 +43,45 @@
 
       connectedCallback() {
         super.connectedCallback();
+
+        this.sharedCountryCodes = [];
+        this.sharedLength = 0;
+
+        if (window.location.search.indexOf('?countryCodes') > -1) {
+          const codesUrl = window.location.href;
+          const codesUrlObj = new URL(codesUrl);
+          const codes = codesUrlObj.searchParams.get("countryCodes");
+          this.sharedCountryCodes = JSON.parse(codes);
+          this.sharedLength = this.sharedCountryCodes.length;
+        };
+
+        // Remind me why this is in a timeout?
         setTimeout( () => {
-        this.visitedCountries = 0;
-        this.countryCodes = [];
-        this.visitedCountriesList = [];
+     
+          this.countryCodes = [];
+          this.visitedCountriesList = [];
 
-        const mapEl = this.$.map;
-        this.countriesStyle = { 
-          stroke: true,
-          color: "rgba(0,0,0,0.15)",
-          weight: 2,
-          fillOpacity: 0.45,
-          fill: true,
-          fillColor: "rgba(0,0,0,0.15)",
-        }
-        this.scratchedCountriesStyle = {
-          fillColor: "gold",
-          fillOpacity: 0.7,
-          stroke: true,
-          color: "rgba(0,0,0,0.15)",
-        }
-        this.map = L.map(mapEl, {attributionControl: false}).setView([0.0, 0.0], 3);
-        L.control.attribution({position: "topright"} ).addTo(this.map)
-        this.addOSMBasemapLayer();
-        this.addCountriesLayer();
+          const mapEl = this.$.map;
+          this.countriesStyle = { 
+            stroke: true,
+            color: "rgba(0,0,0,0.15)",
+            weight: 2,
+            fillOpacity: 0.45,
+            fill: true,
+            fillColor: "rgba(0,0,0,0.15)",
+          }
+          this.scratchedCountriesStyle = {
+            fillColor: "gold",
+            fillOpacity: 0.7,
+            stroke: true,
+            color: "rgba(0,0,0,0.15)",
+          }
+          this.map = L.map(mapEl, {attributionControl: false}).setView([0.0, 0.0], 3);
+          L.control.attribution({position: "topright"} ).addTo(this.map)
+          this.addOSMBasemapLayer();
+          this.addCountriesLayer();
 
-        }, 2000)
+        }, 0)
         
       } 
 
@@ -81,47 +94,6 @@
         }).addTo(this.map)
       }
 
-      onEachCountryFeature(feature, layer) {
-      
-       layer.on('click', (event) => {
-          const countryFeature = event.target;
-          const countryCode = feature.properties.ADMIN; 
-          const visited = this.getVisited(countryCode);
-          
-          if (visited === false || visited === null) {
-            countryFeature.setStyle(this.scratchedCountriesStyle);
-            this.setVisited(countryCode, "true");
-            
-          } else {
-            countryFeature.setStyle(this.countriesStyle);
-            this.setVisited(countryCode, "false");
-          }
-
-          this.emitVisitedChange();
-
-        });
-
-
-      }
-
-      styleFeature(feature, layer) {
-        const visited = this.getVisited(feature.properties.ADMIN);
-        if (visited === false || visited === null) {
-            return this.countriesStyle; 
-          } else {
-            return this.scratchedCountriesStyle;
-          }
-      }
-
-      getVisitedCount() {
-        this.visitedCountries = 0;
-        this.countryCodes.forEach( (code) => {
-          if (this.getVisited(code)) {
-            this.visitedCountries += 1;
-          } 
-        });
-        return this.visitedCountries
-      }
 
       addCountriesLayer() {
         fetch("countries-simple.geojson").then((geojson) => {
@@ -146,6 +118,67 @@
 
           });
         });
+      }
+
+      onEachCountryFeature(feature, layer) {
+
+        if (this.sharedLength > 0) {
+          
+          const countryName = feature.properties.ADMIN
+          const scratchedCountry = this.sharedCountryCodes.indexOf(countryName) > -1;
+
+        if (scratchedCountry) {
+            layer.setStyle(this.scratchedCountriesStyle);
+        }
+
+        } else {
+            
+          // If it is a shared link, it is an interactive map
+          layer.on('click', (event) => {
+            const countryFeature = event.target;
+            const countryCode = feature.properties.ADMIN; 
+            const visited = this.getVisited(countryCode);
+            
+            if (visited === false || visited === null) {
+              countryFeature.setStyle(this.scratchedCountriesStyle);
+              this.setVisited(countryCode, "true");
+              
+            } else {
+              countryFeature.setStyle(this.countriesStyle);
+              this.setVisited(countryCode, "false");
+            }
+
+            this.emitVisitedChange();
+            this.emitUrlChange();
+          });
+
+        }
+
+      }
+
+      styleFeature(feature, layer) {
+        const visited = this.getVisited(feature.properties.ADMIN);
+        if (visited === false || visited === null) {
+            return this.countriesStyle; 
+        } else {
+          return this.scratchedCountriesStyle;
+        }
+      }
+
+      getVisitedCount() {
+        this.visitedCountries = 0;
+
+        if (this.sharedLength) {
+          this.visitedCountries = this.sharedLength;
+        } else {
+          this.countryCodes.forEach( (code) => {
+            if (this.getVisited(code)) {
+              this.visitedCountries += 1;
+            } 
+          });
+        }
+    
+        return this.visitedCountries
       }
 
       emitTotalChange() {
@@ -180,6 +213,7 @@
       }
 
       getVisitedList() {
+        this.visitedCountriesList = [];
         this.countryCodes.forEach( (code) => {
           if (this.getVisited(code)) {
             this.visitedCountriesList.push(code);
@@ -189,11 +223,10 @@
       }
 
       getUrl() {
-        var url = window.location.href.split('?')[0] 
-        url += '?countryCodes=' + this.getVisitedList()
-        console.log(url);
+        let url = window.location.href.split('?')[0];
+        url += '?countryCodes=' + this.getVisitedList();
+        return url;
       }
-
 
     }
 

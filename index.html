@@ -38,19 +38,51 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       background-color: rgba(255,255,255,0.8);
     }
 
+    visited-url {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      font-size: 2rem;
+      z-index: 100000;
+      color: black;
+      display: inline;
+      /*width: 100px;*/
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+    }
+
+     @media (max-width: 860px) { 
+
+        #visited-url {
+          margin-bottom: 70px;
+        }
+
+      }
+
+      @media (max-width: 435px) { 
+
+        #visited-url {
+          margin-bottom: 100px;
+          margin-right: 25vw;
+        }
+
+      }
+
+
   </style>
   <script src="https://cdn.polyfill.io/v2/polyfill.js?features=default,fetch"></script>
   <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-
+  
   <link rel="import" href="map.html">
   <link rel="import" href="country-counter.html">
+  <link rel="import" href="visited-url.html">
 
 </head>
 
 <body>
   <scratch-map>
   </scratch-map>
-  <visited-url></visited-url>
   <country-counter></country-counter>
+  <visited-url id="visited-url"></visited-url>
 </body>
 </html>
