@@ -135,14 +135,19 @@
             
           // If it is a shared link, it is an interactive map
           // We register both click and touch support
-          layer.on('click', this.handleClick.bind(this, feature, layer));
-          layer.on('tap', this.handleClick.call(this, feature, layer));
+          const handle = function(event){ 
+            this.handleClick(event, feature, layer) 
+          }.bind(this);
+          
+          layer.on('click', handle);
+          layer.on('tap', handle);
 
         }
 
       }
 
       handleClick(event, feature, layer) {
+        console.log(feature, layer)
         const countryFeature = event.target;
         const countryCode = feature.properties.ADMIN; 
         const visited = this.getVisited(countryCode);
