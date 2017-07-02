@@ -112,9 +112,9 @@
 
             this.emitVisitedChange();
             this.emitTotalChange();
+            this.emitUrlChange();
     
             console.debug("Total Countries", this.totalCountries);
-            this.getUrl()
 
           });
         });
@@ -225,6 +225,7 @@
       getUrl() {
         let url = window.location.href.split('?')[0];
         url += '?countryCodes=' + this.getVisitedList();
+        console.debug("Getting URL: ", url)
         return url;
       }
 
