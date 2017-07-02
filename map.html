@@ -134,26 +134,30 @@
         } else {
             
           // If it is a shared link, it is an interactive map
-          layer.on('click', (event) => {
-            const countryFeature = event.target;
-            const countryCode = feature.properties.ADMIN; 
-            const visited = this.getVisited(countryCode);
-            
-            if (visited === false || visited === null) {
-              countryFeature.setStyle(this.scratchedCountriesStyle);
-              this.setVisited(countryCode, "true");
-              
-            } else {
-              countryFeature.setStyle(this.countriesStyle);
-              this.setVisited(countryCode, "false");
-            }
-
-            this.emitVisitedChange();
-            this.emitUrlChange();
-          });
+          // We register both click and touch support
+          layer.on('click', this.handleClick.bind(this, feature, layer));
+          layer.on('tap', this.handleClick.call(this, feature, layer));
 
         }
 
+      }
+
+      handleClick(event, feature, layer) {
+        const countryFeature = event.target;
+        const countryCode = feature.properties.ADMIN; 
+        const visited = this.getVisited(countryCode);
+        
+        if (visited === false || visited === null) {
+          countryFeature.setStyle(this.scratchedCountriesStyle);
+          this.setVisited(countryCode, "true");
+          
+        } else {
+          countryFeature.setStyle(this.countriesStyle);
+          this.setVisited(countryCode, "false");
+        }
+
+        this.emitVisitedChange();
+        this.emitUrlChange();
       }
 
       styleFeature(feature, layer) {
