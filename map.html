@@ -44,6 +44,10 @@
       connectedCallback() {
         super.connectedCallback();
 
+        const mapEl = this.$.map;
+        this.map = L.map(mapEl, {attributionControl: false}).setView([0.0, 0.0], 3);
+
+        // Handle if the map is shared
         this.sharedCountryCodes = [];
         this.sharedLength = 0;
 
@@ -55,33 +59,33 @@
           this.sharedLength = this.sharedCountryCodes.length;
         };
 
+        this.countryCodes = [];
+        this.visitedCountriesList = [];
+
+        // Styles for unscratched and scratched countries
+        this.countriesStyle = { 
+          stroke: true,
+          color: "rgba(0,0,0,0.15)",
+          weight: 2,
+          fillOpacity: 0.45,
+          fill: true,
+          fillColor: "rgba(0,0,0,0.15)",
+        }
+        this.scratchedCountriesStyle = {
+          fillColor: "gold",
+          fillOpacity: 0.7,
+          stroke: true,
+          color: "rgba(0,0,0,0.15)",
+        }
+        
+        L.control.attribution({position: "topright"} ).addTo(this.map)
+        this.addOSMBasemapLayer();
+        this.addCountriesLayer();
+
         // Remind me why this is in a timeout?
         setTimeout( () => {
-     
-          this.countryCodes = [];
-          this.visitedCountriesList = [];
-
-          const mapEl = this.$.map;
-          this.countriesStyle = { 
-            stroke: true,
-            color: "rgba(0,0,0,0.15)",
-            weight: 2,
-            fillOpacity: 0.45,
-            fill: true,
-            fillColor: "rgba(0,0,0,0.15)",
-          }
-          this.scratchedCountriesStyle = {
-            fillColor: "gold",
-            fillOpacity: 0.7,
-            stroke: true,
-            color: "rgba(0,0,0,0.15)",
-          }
-          this.map = L.map(mapEl, {attributionControl: false}).setView([0.0, 0.0], 3);
-          L.control.attribution({position: "topright"} ).addTo(this.map)
-          this.addOSMBasemapLayer();
-          this.addCountriesLayer();
-
-        }, 0)
+          this.map.invalidateSize();
+        }, 0);
         
       } 
 
@@ -138,7 +142,7 @@
           const handle = function(event){ 
             this.handleClick(event, feature, layer) 
           }.bind(this);
-          
+
           layer.on('click', handle);
           layer.on('tap', handle);
 
