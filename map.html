@@ -46,6 +46,7 @@
 
         const mapEl = this.$.map;
         this.map = L.map(mapEl, {attributionControl: false}).setView([0.0, 0.0], 3);
+        L.control.attribution({position: "topright"} ).addTo(this.map)
 
         // Handle if the map is shared
         this.sharedCountryCodes = [];
@@ -78,7 +79,6 @@
           color: "rgba(0,0,0,0.15)",
         }
         
-        L.control.attribution({position: "topright"} ).addTo(this.map)
         this.addOSMBasemapLayer();
         this.addCountriesLayer();
 
