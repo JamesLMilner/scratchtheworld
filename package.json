@@ -1,0 +1,25 @@
+{
+  "name": "scratchmap",
+  "version": "1.0.0",
+  "description": "Scratch the World",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JamesMilnerUK/scratchmap.git"
+  },
+  "keywords": [
+    "scratch",
+    "the",
+    "world",
+    "scratchmap"
+  ],
+  "author": "James Milner",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JamesMilnerUK/scratchmap/issues"
+  },
+  "homepage": "https://github.com/JamesMilnerUK/scratchmap#readme"
+}
