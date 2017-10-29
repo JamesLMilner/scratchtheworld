@@ -80,6 +80,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
   </style>
+  <script> 
+  
+    // Register Service wroker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/serviceworker.js')
+      .then(function(reg) {
+        // registration worked
+        console.debug('Registration of service worker succeeded');
+      }).catch(function(error) {
+        // registration failed
+        console.error('Registration failed with ' + error);
+      });
+    }
+  
+  </script>
   <script src="https://cdn.polyfill.io/v2/polyfill.js?features=default,fetch"></script>
   <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
   
