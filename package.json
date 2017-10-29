@@ -1,7 +1,7 @@
 {
-  "name": "scratchmap",
+  "name": "scratchtheworld",
   "version": "1.0.0",
-  "description": "Scratch the World",
+  "description": "Scratch",
   "main": "index.html",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -14,7 +14,6 @@
     "scratch",
     "the",
     "world",
-    "scratchmap"
   ],
   "author": "James Milner",
   "license": "MIT",
