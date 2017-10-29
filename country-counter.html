@@ -51,13 +51,11 @@
       } 
 
       setTotalCountries(data) {
-        console.log(data.detail);
         this.total = data.detail.totalCountries;
         this.percentage = ((this.visited /  this.total) * 100).toFixed(2);
       }
 
       setVisitedCountries(data) {
-        console.log(data.detail);
         this.visited = data.detail.visitedCountries;
         this.percentage = ((this.visited /  this.total) * 100).toFixed(2);
       }
