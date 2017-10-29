@@ -15,7 +15,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
 
   <title>Scratch Map</title>
- 
+
+  <script src="https://cdn.polyfill.io/v2/polyfill.js?features=default,fetch"></script>
+  <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  
+  <link rel="import" href="map.html">
+  <link rel="import" href="country-counter.html">
+  <link rel="import" href="visited-url.html">
+
   <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet"> 
   <style> 
     html, body { 
@@ -27,11 +34,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       background: #d0cfd4;
 
     }
+    
+    scratch-map {
+      z-index: 1;
+    }
+
     country-counter {
       position: absolute;
       bottom: 0;
       font-size: 2rem;
-      z-index: 100000;
+      z-index: 2;
       color: black;
       width: 100%;
       padding-top: 1rem;
@@ -44,7 +56,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       bottom: 0;
       right: 0;
       font-size: 2rem;
-      z-index: 100000;
+      z-index: 2;
       color: black;
       display: inline;
       /*width: 100px;*/
@@ -80,8 +92,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
   </style>
-  <script> 
-  
+  <script async> 
+
     // Register Service wroker
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/serviceworker.js')
@@ -93,15 +105,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         console.error('Registration failed with ' + error);
       });
     }
-  
+        
   </script>
-  <script src="https://cdn.polyfill.io/v2/polyfill.js?features=default,fetch"></script>
-  <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-  
-  <link rel="import" href="map.html">
-  <link rel="import" href="country-counter.html">
-  <link rel="import" href="visited-url.html">
-
 </head>
 
 <body>
