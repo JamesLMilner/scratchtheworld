@@ -186,7 +186,13 @@
           const handle = function(event){ 
 
             const mapSvg = layer._path;
-            mapSvg.classList.add("animateFill")
+
+            // Toggle add
+            if (mapSvg.classList.contains("animateFill")) {
+              mapSvg.classList.remove("animateFill")
+            } else {
+              mapSvg.classList.add("animateFill")
+            }
             
             this.handleClick(event, feature, layer) 
           }.bind(this);
