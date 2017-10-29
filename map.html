@@ -15,6 +15,24 @@
         margin: 0;
       }
 
+
+
+    .animateFill {
+      fill-opacity: 0;
+      animation-timing-function: ease-in-out;
+      animation-fill-mode: forwards;
+      animation-iteration: 1;
+      
+      animation-name: fillIn;
+      animation-duration: 3s;
+      animation-delay: 0s;
+    }
+
+      @keyframes fillIn {
+        from { fill-opacity: 0.35; }
+        to { fill-opacity: 0.75; }
+      }
+
     </style>
 
     <div id="map"></div>
@@ -43,6 +61,12 @@
 
       connectedCallback() {
         super.connectedCallback();
+
+      } 
+
+      ready() {
+
+        super.ready();
 
         const mapEl = this.$.map;
         this.map = L.map(mapEl, {attributionControl: false}).setView([0.0, 0.0], 3);
@@ -73,7 +97,7 @@
           fillColor: "rgba(0,0,0,0.15)",
         }
         this.scratchedCountriesStyle = {
-          fillColor: "gold",
+          fillColor: "#D4AF37",
           fillOpacity: 0.7,
           stroke: true,
           color: "rgba(0,0,0,0.15)",
@@ -85,9 +109,9 @@
         // Remind me why this is in a timeout?
         setTimeout( () => {
           this.map.invalidateSize();
-        }, 0);
+        }, 10);
         
-      } 
+      }
 
       addOSMBasemapLayer() {
         const services = "https://server.arcgisonline.com/ArcGIS/rest/services";
@@ -142,6 +166,11 @@
           // If it is a shared link, it is an interactive map
           // We register both click and touch support
           const handle = function(event){ 
+
+            const mapSvg = layer._path;
+            console.log (layer, mapSvg)
+            mapSvg.classList.add("animateFill")
+            
             this.handleClick(event, feature, layer) 
           }.bind(this);
 
