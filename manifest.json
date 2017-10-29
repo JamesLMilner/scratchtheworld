@@ -1,8 +1,8 @@
 {
   "name": "Scratch the World",
   "short_name": "Scratchmap",
-  "theme_color": "#ffd700",
-  "background_color": "#ffd700",
+  "theme_color": "#D4AF37",
+  "background_color": "#D4AF37",
   "display": "standalone",
   "Scope": "/",
   "start_url": "/",
