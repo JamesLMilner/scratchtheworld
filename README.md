@@ -7,6 +7,9 @@ A fun project using Polymer 2 that allows the user to 'scratch' off all the coun
 
 https://scratchthe.world
 
+# Build
+
+```bower install```
 
 # License 
 MIT

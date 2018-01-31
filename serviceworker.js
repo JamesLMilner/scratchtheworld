@@ -15,21 +15,20 @@
 // Names of the two caches used in this version of the service worker.
 // Change to v2, etc. when you update any of the local resources, which will
 // in turn trigger the install event again.
-const PRECACHE = 'precache-v13';
-const RUNTIME = 'runtime';
+const PRECACHE = 'precache-scratch-v1';
+const RUNTIME = 'runtime-scratch-v1';
 
 // A list of local resources we always want to be cached.
 const PRECACHE_URLS = [
   'index.html',
   './', // Alias for index.html
-  'country-counter.html',
-  'map.html',
-  'visited-url.html',
+  './dist/main.js',
   'countries-simple.geojson'
 ];
 
 // The install handler takes care of precaching the resources we always need.
 self.addEventListener('install', event => {
+  console.log("Install event")
   event.waitUntil(
     caches.open(PRECACHE)
       .then(cache => cache.addAll(PRECACHE_URLS))
@@ -39,11 +38,13 @@ self.addEventListener('install', event => {
 
 // The activate handler takes care of cleaning up old caches.
 self.addEventListener('activate', event => {
+  console.log("Activate event")
   const currentCaches = [PRECACHE, RUNTIME];
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return cacheNames.filter(cacheName => !currentCaches.includes(cacheName));
     }).then(cachesToDelete => {
+      console.log("Deleting caches", cachesToDelete);
       return Promise.all(cachesToDelete.map(cacheToDelete => {
         return caches.delete(cacheToDelete);
       }));

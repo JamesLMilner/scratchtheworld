@@ -17,12 +17,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <title>Scratch the World</title>
 
   <script src="https://cdn.polyfill.io/v2/polyfill.js?features=default,fetch"></script>
-  <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-  
-  <link rel="import" href="map.html">
-  <link rel="import" href="country-counter.html">
-  <link rel="import" href="visited-url.html">
-
   <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet"> 
   <style> 
     html, body { 
@@ -107,21 +101,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <link rel="manifest" href="/manifest.json">
 
-  <script async> 
-
-    // Register Service wroker
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/serviceworker.js')
-      .then(function(reg) {
-        // registration worked
-        console.debug('Registration of service worker succeeded');
-      }).catch(function(error) {
-        // registration failed
-        console.error('Registration failed with ' + error);
-      });
-    }
-        
-  </script>
 </head>
 
 <body>
@@ -129,5 +108,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </scratch-map>
   <country-counter></country-counter>
   <visited-url id="visited-url"></visited-url>
+
+  <script async> 
+
+      // Register Service wroker
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/serviceworker.js')
+        .then(function(registration) {
+          // registration worked
+          registration.update();
+          console.debug('Registration of service worker succeeded');
+        }).catch(function(error) {
+          // registration failed
+          console.error('Registration failed with ' + error);
+        });
+      }
+          
+  </script>
+  <script async src="./dist/main.js"></script>
+
 </body>
 </html>
