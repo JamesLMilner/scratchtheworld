@@ -42,8 +42,9 @@ export class ScratchMap extends PolymerElement {
       }
 
       #map .label {
-        height: 20px !important;
-        width: max-content !important;
+        opacity: 0;
+        display: inline-block;
+        width: initial !important;
       }
 
       svg {
@@ -119,7 +120,10 @@ export class ScratchMap extends PolymerElement {
   ready() {
     super.ready();
 
-    this.hideLabel = function(label){ label.labelObject.style.opacity = 0;};
+    this.hideLabel = function(label){ 
+      console.log("Setting label opacity to 0", label);
+      label.labelObject.style.opacity = 0;
+    };
     this.showLabel = function(label){ label.labelObject.style.opacity = 0.8;};
     this.labelEngine = new labelgun.default(this.hideLabel, this.showLabel);
     this.markers = [];
@@ -178,7 +182,7 @@ export class ScratchMap extends PolymerElement {
     const loadingCountries = this.$.loadingCountries;
     
 
-    fetch("countries-simple.geojson").then((geojson) => {
+    fetch("countries-simple-clean.geojson").then((geojson) => {
       this.markerLayer =  L.layerGroup();
       geojson.json().then((countries) => {
 
@@ -190,52 +194,59 @@ export class ScratchMap extends PolymerElement {
         this.totalCountries = countries.features.length;
 
         layers.getLayers().forEach((layer) => {
-          const countryName = layer.feature.properties.ADMIN
-          this.countryCodes.push(countryName);
-
-          const icon = L.divIcon({
-            className: 'label',
-            html : countryName,
-            iconOffset : [0, 0],
-            iconSize : [0, 14]
-          });
-          const coords = layer.feature.geometry.coordinates;
-
-          if (layer.feature.geometry.type === "Polygon") {
-            this.createCenterMarker(coords, icon, countryName);
-          } else if (layer.feature.geometry.type === "MultiPolygon") {
-            
-            let largest = { area: 0, polygon: null }
-
-            coords.forEach((poly) => {
-              const geojsonPoly = { type : "Polygon", coordinates : poly};
-              const polyArea = area(geojsonPoly);
-
-              if (polyArea > largest.area) {
-                largest.area = polyArea;
-                largest.polygon = poly;
-              }
-            })
-            this.createCenterMarker(largest.polygon, icon, countryName);
-          }
-  
+          this.handleLabels(layer);
         });
         
         loadingCountries.style.display = "none";
         this.emitVisitedChange();
         this.emitTotalChange();
         this.emitUrlChange();
-        this.resetLabels(this.markerLayer);
+
+        setTimeout(() => {
+          this.resetLabels(this.markerLayer);
+        }, 200);
         console.debug("Total Countries", this.totalCountries);
 
       });
     });
 
-
+    this.map.on("viewreset", () => {
+      this.resetLabels(this.markerLayer);
+    });
 
     this.map.on("zoomend", () => {
       this.resetLabels(this.markerLayer);
     });
+  }
+
+  handleLabels(layer) {
+    const countryName = layer.feature.properties.ADMIN
+    this.countryCodes.push(countryName);
+
+    const icon = L.divIcon({
+      className: 'label',
+      html : countryName,
+      iconSize : null,
+    });
+    const coords = layer.feature.geometry.coordinates;
+
+    if (layer.feature.geometry.type === "Polygon") {
+      this.createCenterMarker(coords, icon, countryName);
+    } else if (layer.feature.geometry.type === "MultiPolygon") {
+      
+      let largest = { area: 0, polygon: null }
+
+      coords.forEach((poly) => {
+        const geojsonPoly = { type : "Polygon", coordinates : poly};
+        const polyArea = area(geojsonPoly);
+
+        if (polyArea > largest.area) {
+          largest.area = polyArea;
+          largest.polygon = poly;
+        }
+      })
+      this.createCenterMarker(largest.polygon, icon, countryName);
+    }
   }
 
   createCenterMarker(coordinates, icon, countryName) {
@@ -396,6 +407,8 @@ export class ScratchMap extends PolymerElement {
   
       // We need the bounding rectangle of the label itself
       var rect = label.getBoundingClientRect();
+
+      console.log(rect);
   
       // We convert the container coordinates (screen space) to Lat/lng
       var bottomLeft = this.map.containerPointToLatLng([rect.left, rect.bottom]);
@@ -405,11 +418,15 @@ export class ScratchMap extends PolymerElement {
         topRight   : [topRight.lng, topRight.lat]
       };
   
+      let weight = -parseInt(label.innerText);
+      if (isNaN(weight)) weight = 1;
+      console.log(weight);
+
       // Ingest the label into labelgun itself
       this.labelEngine.ingestLabel(
         boundingBox,
         id,
-        -parseInt(label.innerText), // Weight
+        weight,
         label,
         "Test " + id,
         false
