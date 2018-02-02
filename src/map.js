@@ -120,10 +120,7 @@ export class ScratchMap extends PolymerElement {
   ready() {
     super.ready();
 
-    this.hideLabel = function(label){ 
-      console.log("Setting label opacity to 0", label);
-      label.labelObject.style.opacity = 0;
-    };
+    this.hideLabel = function(label){ label.labelObject.style.opacity = 0; };
     this.showLabel = function(label){ label.labelObject.style.opacity = 0.8;};
     this.labelEngine = new labelgun.default(this.hideLabel, this.showLabel);
     this.markers = [];
@@ -408,8 +405,6 @@ export class ScratchMap extends PolymerElement {
       // We need the bounding rectangle of the label itself
       var rect = label.getBoundingClientRect();
 
-      console.log(rect);
-  
       // We convert the container coordinates (screen space) to Lat/lng
       var bottomLeft = this.map.containerPointToLatLng([rect.left, rect.bottom]);
       var topRight = this.map.containerPointToLatLng([rect.right, rect.top]);
@@ -420,7 +415,6 @@ export class ScratchMap extends PolymerElement {
   
       let weight = -parseInt(label.innerText);
       if (isNaN(weight)) weight = 1;
-      console.log(weight);
 
       // Ingest the label into labelgun itself
       this.labelEngine.ingestLabel(
