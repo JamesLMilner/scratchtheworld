@@ -251,7 +251,7 @@ export class ScratchMap extends PolymerElement {
     const center = polylabel(coordinates, 1.0);
     const latLng = L.latLng([center[1], center[0]]);
     const point = this.map.latLngToContainerPoint(latLng);
-    const newPoint = L.point([point.x - (countryName.length * 2), point.y-0]);
+    const newPoint = L.point([point.x, point.y-0]);
     const centeredLatLng = this.map.containerPointToLatLng(newPoint);
   
     const marker = L.marker(centeredLatLng, {icon: icon});  // Swap coordinates around

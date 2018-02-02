@@ -16,8 +16,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <title>Scratch the World</title>
 
-  <script src="https://cdn.polyfill.io/v2/polyfill.js?features=default,fetch"></script>
-  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet"> 
   <style> 
     html, body { 
       font-family: 'Lato', sans-serif;
@@ -109,11 +107,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <country-counter></country-counter>
   <visited-url id="visited-url"></visited-url>
 
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet"> 
   <!-- Polyfills for Custom Elements etc -->
   <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
   <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-lite.js"></script>
 
   <!-- App code and service worker registration logic -->
+  <script src="https://cdn.polyfill.io/v2/polyfill.js?features=default,fetch"></script>
   <script async src="./dist/main.js"></script>
   <script async src="./serviceworker-registration.js"></script>
 
