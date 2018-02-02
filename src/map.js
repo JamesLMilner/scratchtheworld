@@ -179,7 +179,7 @@ export class ScratchMap extends PolymerElement {
     const loadingCountries = this.$.loadingCountries;
     
 
-    fetch("countries-simple-clean.geojson").then((geojson) => {
+    fetch("countries.geojson").then((geojson) => {
       this.markerLayer =  L.layerGroup();
       geojson.json().then((countries) => {
 

@@ -102,6 +102,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <link rel="manifest" href="/manifest.json">
 
 </head>
+<script async src="service-worker-registration.js"></script>
 
 <body>
   <scratch-map>
@@ -109,26 +110,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <country-counter></country-counter>
   <visited-url id="visited-url"></visited-url>
 
-  <script async> 
-
-      // Register Service wroker
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/serviceworker.js')
-        .then(function(registration) {
-          // registration worked
-          registration.update();
-          console.debug('Registration of service worker succeeded');
-        }).catch(function(error) {
-          // registration failed
-          console.error('Registration failed with ' + error);
-        });
-      }
-          
-  </script>
-  <!-- <script src="./node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js"></script> -->
+  <!-- Polyfills for Custom Elements etc -->
   <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
   <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-lite.js"></script>
+
+  <!-- App code and service worker registration logic -->
   <script async src="./dist/main.js"></script>
+  <script async src="./service-worker-registration.js"></script>
 
 </body>
 </html>
