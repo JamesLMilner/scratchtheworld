@@ -45,6 +45,7 @@ export class ScratchMap extends PolymerElement {
         opacity: 0;
         display: inline-block;
         width: initial !important;
+        pointer-events: none;
       }
 
       svg {
