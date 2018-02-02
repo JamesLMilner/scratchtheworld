@@ -23,7 +23,7 @@ const PRECACHE_URLS = [
   'index.html',
   './', // Alias for index.html
   './dist/main.js',
-  'countries-simple-clean.geojson'
+  'countries.geojson'
 ];
 
 // The install handler takes care of precaching the resources we always need.
