@@ -43,9 +43,12 @@ export class ScratchMap extends PolymerElement {
 
       #map .label {
         opacity: 0;
+        height: initial !important;
         display: inline-block;
         width: initial !important;
+        padding: 3px !important;
         pointer-events: none;
+        text-align: center;
       }
 
       svg {
@@ -76,22 +79,8 @@ export class ScratchMap extends PolymerElement {
         to { fill-opacity: 0.75; }
       }
 
-      #loadingCountries {
-        text-align: center;
-        margin: 0 auto;
-        font-size: 3em;
-        z-index: 3;
-        vertical-align: middle;
-        color: black;
-        width: 100%;
-        height: 100%;
-        padding-top: 35vh;
-        position: absolute;
-      }
-
     </style>
 
-    <span id="loadingCountries"> Loading Countries... </span>
     <div id="map"></div>
   `
   }
@@ -177,36 +166,37 @@ export class ScratchMap extends PolymerElement {
   }
 
   addCountriesLayer() {
-    const loadingCountries = this.$.loadingCountries;
-    
 
-    fetch("countries.geojson").then((geojson) => {
-      this.markerLayer =  L.layerGroup();
-      geojson.json().then((countries) => {
+    window.addEventListener("load", () => {
 
-        const layers = L.geoJson(countries,    {
-          style: this.styleFeature.bind(this),
-          onEachFeature: this.onEachCountryFeature.bind(this)
-        }).addTo(this.map);
-      
-        this.totalCountries = countries.features.length;
-
-        layers.getLayers().forEach((layer) => {
-          this.handleLabels(layer);
-        });
+      fetch("countries.geojson").then((geojson) => {
+        this.markerLayer =  L.layerGroup();
+        geojson.json().then((countries) => {
+  
+          const countryFeatures = L.geoJson(countries,    {
+            style: this.styleFeature.bind(this),
+            onEachFeature: this.onEachCountryFeature.bind(this)
+          }).addTo(this.map);
         
-        loadingCountries.style.display = "none";
-        this.emitVisitedChange();
-        this.emitTotalChange();
-        this.emitUrlChange();
+          this.totalCountries = countries.features.length;
+  
+          countryFeatures.getLayers().forEach((layer) => {
+            this.handleLabels(layer);
+          });
+          
+          this.emitVisitedChange();
+          this.emitTotalChange();
+          this.emitUrlChange();
 
-        setTimeout(() => {
-          this.resetLabels(this.markerLayer);
-        }, 200);
-        console.debug("Total Countries", this.totalCountries);
-
+          setTimeout(() => {
+            this.resetLabels(this.markerLayer);
+            this.hideLoad();
+          }, 0);
+          
+        });
       });
-    });
+    })
+    
 
     this.map.on("viewreset", () => {
       this.resetLabels(this.markerLayer);
@@ -217,6 +207,11 @@ export class ScratchMap extends PolymerElement {
     });
   }
 
+  hideLoad() {
+    const containerId = "loadingCountriesContainer";
+    document.getElementById(containerId).style.display = "none";
+  }
+
   handleLabels(layer) {
     const countryName = layer.feature.properties.ADMIN
     this.countryCodes.push(countryName);
@@ -224,7 +219,8 @@ export class ScratchMap extends PolymerElement {
     const icon = L.divIcon({
       className: 'label',
       html : countryName,
-      iconSize : null,
+      iconSize : [50, 12],
+      iconAnchor : [25, 6]
     });
     const coords = layer.feature.geometry.coordinates;
 
@@ -256,6 +252,7 @@ export class ScratchMap extends PolymerElement {
   
     const marker = L.marker(centeredLatLng, {icon: icon});  // Swap coordinates around
     this.markerLayer.addLayer(marker).addTo(this.map);
+
   }
 
   onEachCountryFeature(feature, layer) {
@@ -413,8 +410,8 @@ export class ScratchMap extends PolymerElement {
         bottomLeft : [bottomLeft.lng, bottomLeft.lat],
         topRight   : [topRight.lng, topRight.lat]
       };
-  
-      let weight = -parseInt(label.innerText);
+ 
+      let weight = -parseInt(label.innerHTML.length);
       if (isNaN(weight)) weight = 1;
 
       // Ingest the label into labelgun itself

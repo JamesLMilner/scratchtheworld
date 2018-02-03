@@ -11,8 +11,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <!doctype html>
 <html lang="en">
 <head>
+
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+  <meta name="theme-color" content="#D4AF37">
+  <meta name="Description" content="A digital map of the world where uses can highlight places that they've been and store it persistently">
 
   <title>Scratch the World</title>
 
@@ -61,39 +64,64 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     }
 
-     @media (max-width: 1100px) { 
+    #nojavascript {
+      text-align: center;
+    }
 
-        #visited-url {
-          margin-bottom: 60px;
-          background: rgba(255,255,255,0.5);
-        }
+    #loadingCountries {
+      text-align: center;
+      margin: 0 auto;
+      font-size: 3em;
+      z-index: 3;
+      vertical-align: middle;
+      color: black;
+      width: 100%;
+      height: 100%;
+      padding-top: 35vh;
+      position: absolute;
+    }
 
+    #loadingCountriesContainer {
+      position: absolute;
+      height: 100%;
+      width: 100%; 
+      z-index: 3;
+      top: 0;
+
+    }
+
+    @media (max-width: 1100px) { 
+
+      #visited-url {
+        margin-bottom: 60px;
+        background: rgba(255,255,255,0.5);
       }
 
-      @media (max-width: 435px) { 
+    }
 
-        #visited-url {
-          margin-bottom: 60px;
-          margin-right: 0;
-          width: 100%;
-          text-align: center;
-          background: rgba(255,255,255,0.5);
-        }
+    @media (max-width: 435px) { 
 
+      #visited-url {
+        margin-bottom: 60px;
+        margin-right: 0;
+        width: 100%;
+        text-align: center;
+        background: rgba(255,255,255,0.5);
       }
 
-      @media (max-width: 278px) { 
+    }
 
-        #visited-url {
-          margin-bottom: 90px;
-          margin-right: 0;
-          width: 100%;
-          text-align: center;
-          background: rgba(255,255,255,0.5);
-        }
+    @media (max-width: 278px) { 
 
+      #visited-url {
+        margin-bottom: 90px;
+        margin-right: 0;
+        width: 100%;
+        text-align: center;
+        background: rgba(255,255,255,0.5);
       }
 
+    }
 
   </style>
 
@@ -102,6 +130,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 </head>
 
 <body>
+
+  <noscript id="nojavascript"> 
+    <h3>
+    Sorry, we need JavaScript for this to work! Try enabling JavaScript again or 
+    using a JavaScript enabled browser.
+    </h3>
+  </noscript>
+
+  <div id="loadingCountriesContainer">
+    <span id="loadingCountries"> Loading Countries... </span>
+  </div>
   <scratch-map>
   </scratch-map>
   <country-counter></country-counter>
