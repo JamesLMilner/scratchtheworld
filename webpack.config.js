@@ -17,13 +17,9 @@ module.exports = {
         sourceMap: true,
         uglifyOptions: {
             ecma: 6,
-            mangle: {
-                safari10: true,
-            },
-            output: {
-                safari10: true,
-            },
-        } 
+            safari10: true
+        },
+       
       })
     ]
 }
