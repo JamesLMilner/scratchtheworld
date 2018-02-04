@@ -3,6 +3,7 @@ const path = require("path");
 
 module.exports = {
     entry: "./src/entry.js",
+    mode: "none",
     output: {
         // options related to how webpack emits results
     
@@ -17,7 +18,13 @@ module.exports = {
         sourceMap: true,
         uglifyOptions: {
             ecma: 6,
-            safari10: true
+            safari10: true,
+            mangle: {
+                safari10: true,
+            }, 
+            output: {
+                safari10: true,
+            }
         },
        
       })

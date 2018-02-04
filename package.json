@@ -4,7 +4,7 @@
   "description": "Scratch",
   "main": "index.html",
   "scripts": {
-    "build": "webpack"
+    "build": "webpack --config webpack.config.js"
   },
   "repository": "git+https://github.com/JamesMilnerUK/scratchmap.git",
   "keywords": [
