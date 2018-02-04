@@ -134,7 +134,7 @@ export class ScratchMap extends PolymerElement {
       const codes = codesUrlObj.searchParams.get("countryCodes");
       this.sharedCountryCodes = JSON.parse(codes);
       this.sharedLength = this.sharedCountryCodes.length;
-    };
+    }
 
     this.countryCodes = [];
     this.visitedCountriesList = [];
@@ -208,7 +208,7 @@ export class ScratchMap extends PolymerElement {
   }
 
   hideLoad() {
-    const containerId = "loadingCountriesContainer";
+    const containerId = "loadingContainer";
     document.getElementById(containerId).style.display = "none";
   }
 
@@ -243,7 +243,7 @@ export class ScratchMap extends PolymerElement {
     }
   }
 
-  createCenterMarker(coordinates, icon, countryName) {
+  createCenterMarker(coordinates, icon) {
     const center = polylabel(coordinates, 1.0);
     const latLng = L.latLng([center[1], center[0]]);
     const point = this.map.latLngToContainerPoint(latLng);
@@ -292,7 +292,7 @@ export class ScratchMap extends PolymerElement {
 
   }
 
-  handleClick(event, feature, layer) {
+  handleClick(event, feature) {
     const countryFeature = event.target;
     const countryCode = feature.properties.ADMIN; 
     const visited = this.getVisited(countryCode);
@@ -310,7 +310,7 @@ export class ScratchMap extends PolymerElement {
     this.emitUrlChange();
   }
 
-  styleFeature(feature, layer) {
+  styleFeature(feature) {
     const visited = this.getVisited(feature.properties.ADMIN);
     if (visited === false || visited === null) {
         return this.countriesStyle; 
@@ -385,7 +385,7 @@ export class ScratchMap extends PolymerElement {
 
   resetLabels(markers) {
 
-    var i = 0;
+    let i = 0;
     markers.eachLayer((label) => {
       this.addLabel(label, ++i);
     });
@@ -396,23 +396,25 @@ export class ScratchMap extends PolymerElement {
   addLabel(layer, id) {
   
     // This is ugly but there is no getContainer method on the tooltip :(
-    var label = layer.getElement();
+    const label = layer.getElement();
     //layer.style.marginLeft = -(layer.innerText.length * 10);
     if (label) {
   
       // We need the bounding rectangle of the label itself
-      var rect = label.getBoundingClientRect();
+      const rect = label.getBoundingClientRect();
 
       // We convert the container coordinates (screen space) to Lat/lng
-      var bottomLeft = this.map.containerPointToLatLng([rect.left, rect.bottom]);
-      var topRight = this.map.containerPointToLatLng([rect.right, rect.top]);
-      var boundingBox = {
+      const bottomLeft = this.map.containerPointToLatLng([rect.left, rect.bottom]);
+      const topRight = this.map.containerPointToLatLng([rect.right, rect.top]);
+      const boundingBox = {
         bottomLeft : [bottomLeft.lng, bottomLeft.lat],
         topRight   : [topRight.lng, topRight.lat]
       };
  
       let weight = -parseInt(label.innerHTML.length);
-      if (isNaN(weight)) weight = 1;
+      if (isNaN(weight)) {
+        weight = 1;
+      }
 
       // Ingest the label into labelgun itself
       this.labelEngine.ingestLabel(
