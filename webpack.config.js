@@ -19,12 +19,12 @@ module.exports = {
         uglifyOptions: {
             ecma: 6,
             safari10: true,
-            mangle: {
-                safari10: true,
-            }, 
-            output: {
-                safari10: true,
-            }
+            // mangle: {
+            //     safari10: true,
+            // }, 
+            // output: {
+            //     safari10: true,
+            // }
         },
        
       })
