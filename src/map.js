@@ -380,7 +380,7 @@ export class ScratchMap extends PolymerElement {
     let url = window.location.href.split('?')[0];
     url += '?countryCodes=' + this.getVisitedList();
     console.debug("Getting URL: ", url)
-    return url;
+    return encodeURI(url);
   }
 
   resetLabels(markers) {
