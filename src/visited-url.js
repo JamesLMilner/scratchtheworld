@@ -38,11 +38,11 @@ export class VisitedUrl extends PolymerElement {
         }
 
         .show {
-          display: initial !important;
+          visibility: visible !important;
         }
 
         .hide {
-          display: none !important;
+          visibility: hidden !important;
         }
 
         strong {
@@ -56,8 +56,8 @@ export class VisitedUrl extends PolymerElement {
           display: inline;
         }
 
-        #webShare {
-          display: none;
+        #web-share {
+          visibility: hidden;
           width: 100%;
           font-size: 1em;
           height: 100%;
@@ -67,12 +67,12 @@ export class VisitedUrl extends PolymerElement {
           border-radius: 3px;
           vertical-align: middle;
           line-height: 1e;
-          font-family: Lato, sans-serif;
+          font-family: 'Lato', sans-serif;
         }
     
       </style>
 
-      <button id="webShare"> Share </button>
+      <button id="web-share"> Share </button>
 
       <div id="visited-url">
         <strong>Share:</strong>
@@ -96,13 +96,12 @@ export class VisitedUrl extends PolymerElement {
     this.shared = window.location.search.indexOf('?countryCodes') > -1;
     this.url = window.location.href;
 
-
-    const urlEl = this.querySelector("#visited-url");
-    const buttonEl = this.querySelector("#refresh-button");
-    const webShare = this.querySelector("#webShare");
+    const urlEl = this.shadowRoot.querySelector("#visited-url");
+    const buttonEl = this.shadowRoot.querySelector("#refresh-button");
+    const webShare = this.shadowRoot.querySelector("#web-share");
 
     if (navigator.share) {
-      console.log("navigator share")
+      console.log("navigator share", webShare)
       webShare.addEventListener("click", () => {
 
         navigator.share({
