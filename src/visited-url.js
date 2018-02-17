@@ -96,30 +96,15 @@ export class VisitedUrl extends PolymerElement {
     this.shared = window.location.search.indexOf('?countryCodes') > -1;
     this.url = window.location.href;
 
-    if (navigator.share) {
-      this.handleWebShare();
-    }
-    
 
-   
     const urlEl = this.querySelector("#visited-url");
     const buttonEl = this.querySelector("#refresh-button");
-    if (this.shared) {
-      urlEl.classList.add("hide");
-      buttonEl.classList.add("show");
-    }
+    const webShare = this.querySelector("#webShare");
 
-    document.addEventListener('visitedUrl', this.setUrl.bind(this));
-  } 
-
-  handleWebShare() {
-    console.log("navigator share")
-      const webShare = this.querySelector("#webShare");
-      webShare.style.display = "block";
-      const visitedUrl = this.querySelector("#visitedUrl");
-      visitedUrl.style.display = "none";
-
+    if (navigator.share) {
+      console.log("navigator share")
       webShare.addEventListener("click", () => {
+
         navigator.share({
           title: 'Scratch the World',
           text: "Check out countries I've visited!",
@@ -127,8 +112,23 @@ export class VisitedUrl extends PolymerElement {
         })
           .then(() => console.log('Successful share'))
           .catch((error) => console.log('Error sharing', error))
-        });
-  }
+
+      });
+
+      urlEl.classList.add("hide");
+      webShare.classList.add("show");
+
+    }
+
+    if (this.shared) {
+      urlEl.classList.add("hide");
+      webShare.classList.add("hide");
+      buttonEl.classList.add("show");
+    }
+
+    document.addEventListener('visitedUrl', this.setUrl.bind(this));
+  } 
+
 
   refreshPage() {
     window.location = location.protocol + '//' + location.host + location.pathname;

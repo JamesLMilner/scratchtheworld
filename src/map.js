@@ -110,8 +110,16 @@ export class ScratchMap extends PolymerElement {
   ready() {
     super.ready();
 
-    this.hideLabel = function(label){ label.labelObject.style.opacity = 0; };
-    this.showLabel = function(label){ label.labelObject.style.opacity = 0.8;};
+    this.hideLabel = function(label) { 
+      requestAnimationFrame(() => {
+        label.labelObject.style.opacity = 0; 
+      });
+    };
+    this.showLabel = function(label) {
+      requestAnimationFrame(() => {
+       label.labelObject.style.opacity = 0.8;
+      });
+    };
     this.labelEngine = new labelgun.default(this.hideLabel, this.showLabel);
     this.markers = [];
 
