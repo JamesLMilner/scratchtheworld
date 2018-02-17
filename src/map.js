@@ -140,7 +140,7 @@ export class ScratchMap extends PolymerElement {
     this.visitedCountriesList = [];
 
     // Styles for unscratched and scratched countries
-    this.countriesStyle = { 
+    this.scratchedCountriesStyle = { 
       stroke: true,
       color: "rgba(0,0,0,0.07)",
       weight: 2,
@@ -148,7 +148,7 @@ export class ScratchMap extends PolymerElement {
       fill: true,
       fillColor: "rgba(0,0,0,0.07)",
     }
-    this.scratchedCountriesStyle = {
+    this.countriesStyle = {
       fillColor: "#D4AF37",
       fillOpacity: 0.7,
       stroke: true,

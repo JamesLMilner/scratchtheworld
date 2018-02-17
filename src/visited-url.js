@@ -55,8 +55,24 @@ export class VisitedUrl extends PolymerElement {
           margin-bottom: 0.5em;
           display: inline;
         }
+
+        #webShare {
+          display: none;
+          width: 100%;
+          font-size: 1em;
+          height: 100%;
+          background: #e0e0e0;
+          border: none;
+          font-weight: lighter;
+          border-radius: 3px;
+          vertical-align: middle;
+          line-height: 1e;
+          font-family: Lato, sans-serif;
+        }
     
       </style>
+
+      <button id="webShare"> Share </button>
 
       <div id="visited-url">
         <strong>Share:</strong>
@@ -78,6 +94,14 @@ export class VisitedUrl extends PolymerElement {
     super.connectedCallback();
 
     this.shared = window.location.search.indexOf('?countryCodes') > -1;
+    this.url = window.location.href;
+
+    if (navigator.share) {
+      this.handleWebShare();
+    }
+    
+
+   
     const urlEl = this.querySelector("#visited-url");
     const buttonEl = this.querySelector("#refresh-button");
     if (this.shared) {
@@ -85,9 +109,26 @@ export class VisitedUrl extends PolymerElement {
       buttonEl.classList.add("show");
     }
 
-    this.url = window.location.href;
     document.addEventListener('visitedUrl', this.setUrl.bind(this));
   } 
+
+  handleWebShare() {
+    console.log("navigator share")
+      const webShare = this.querySelector("#webShare");
+      webShare.style.display = "block";
+      const visitedUrl = this.querySelector("#visitedUrl");
+      visitedUrl.style.display = "none";
+
+      webShare.addEventListener("click", () => {
+        navigator.share({
+          title: 'Scratch the World',
+          text: "Check out countries I've visited!",
+          url: this.url,
+        })
+          .then(() => console.log('Successful share'))
+          .catch((error) => console.log('Error sharing', error))
+        });
+  }
 
   refreshPage() {
     window.location = location.protocol + '//' + location.host + location.pathname;
