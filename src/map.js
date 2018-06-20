@@ -1,11 +1,11 @@
 
-import {Element as PolymerElement} 
+import {html, PolymerElement}
   from  "../node_modules/@polymer/polymer/polymer-element.js";
 
-import { Map, control } 
+import { Map, control }
   from "../node_modules/leaflet/dist/leaflet.js";
 
-import * as labelgun 
+import * as labelgun
   from "../node_modules/labelgun/lib/labelgun.js";
 
 import * as polylabel
@@ -19,8 +19,8 @@ export class ScratchMap extends PolymerElement {
   static get is() { return 'scratch-map' }
 
   static get template() {
-      return `
-      <link href="./node_modules/leaflet/dist/leaflet.css" rel="stylesheet"> 
+      return html`
+      <link href="./node_modules/leaflet/dist/leaflet.css" rel="stylesheet">
       <style>
 
       #map {
@@ -68,7 +68,7 @@ export class ScratchMap extends PolymerElement {
         animation-timing-function: ease-in-out;
         animation-fill-mode: forwards;
         animation-iteration: 1;
-        
+
         animation-name: fillIn;
         animation-duration: 3s;
         animation-delay: 0s;
@@ -99,20 +99,21 @@ export class ScratchMap extends PolymerElement {
       showLabel: null,
       labelEngine: null,
       markerLayer: [],
+      getArea: null,
     };
   }
 
   connectedCallback() {
     super.connectedCallback();
 
-  } 
+  }
 
   ready() {
     super.ready();
 
-    this.hideLabel = function(label) { 
+    this.hideLabel = function(label) {
       requestAnimationFrame(() => {
-        label.labelObject.style.opacity = 0; 
+        label.labelObject.style.opacity = 0;
       });
     };
     this.showLabel = function(label) {
@@ -148,7 +149,7 @@ export class ScratchMap extends PolymerElement {
     this.visitedCountriesList = [];
 
     // Styles for unscratched and scratched countries
-    this.scratchedCountriesStyle = { 
+    this.scratchedCountriesStyle = {
       stroke: true,
       color: "rgba(0,0,0,0.07)",
       weight: 2,
@@ -162,7 +163,7 @@ export class ScratchMap extends PolymerElement {
       stroke: true,
       color: "rgba(0,0,0,0.07)",
     }
-    
+
     //this.addOSMBasemapLayer();
     this.addCountriesLayer();
 
@@ -170,7 +171,7 @@ export class ScratchMap extends PolymerElement {
     setTimeout( () => {
       this.map.invalidateSize();
     }, 10);
-    
+
   }
 
   addCountriesLayer() {
@@ -180,18 +181,18 @@ export class ScratchMap extends PolymerElement {
       fetch("countries.geojson").then((geojson) => {
         this.markerLayer =  L.layerGroup();
         geojson.json().then((countries) => {
-  
+
           const countryFeatures = L.geoJson(countries,    {
             style: this.styleFeature.bind(this),
             onEachFeature: this.onEachCountryFeature.bind(this)
           }).addTo(this.map);
-        
+
           this.totalCountries = countries.features.length;
-  
+
           countryFeatures.getLayers().forEach((layer) => {
             this.handleLabels(layer);
           });
-          
+
           this.emitVisitedChange();
           this.emitTotalChange();
           this.emitUrlChange();
@@ -200,11 +201,11 @@ export class ScratchMap extends PolymerElement {
             this.resetLabels(this.markerLayer);
             this.hideLoad();
           }, 0);
-          
+
         });
       });
     })
-    
+
 
     this.map.on("viewreset", () => {
       this.resetLabels(this.markerLayer);
@@ -220,6 +221,21 @@ export class ScratchMap extends PolymerElement {
     document.getElementById(containerId).style.display = "none";
   }
 
+  getArea(coords) {
+    let largest = { area: 0, polygon: null }
+
+    coords.forEach((poly) => {
+      const geojsonPoly = { type : "Polygon", coordinates : poly};
+      const polyArea = area(geojsonPoly);
+
+      if (polyArea > largest.area) {
+        largest.area = polyArea;
+        largest.polygon = poly;
+      }
+    });
+    return largest;
+  }
+
   handleLabels(layer) {
     const countryName = layer.feature.properties.ADMIN
     this.countryCodes.push(countryName);
@@ -230,23 +246,13 @@ export class ScratchMap extends PolymerElement {
       iconSize : [50, 12],
       iconAnchor : [25, 6]
     });
+
     const coords = layer.feature.geometry.coordinates;
 
     if (layer.feature.geometry.type === "Polygon") {
       this.createCenterMarker(coords, icon, countryName);
     } else if (layer.feature.geometry.type === "MultiPolygon") {
-      
-      let largest = { area: 0, polygon: null }
-
-      coords.forEach((poly) => {
-        const geojsonPoly = { type : "Polygon", coordinates : poly};
-        const polyArea = area(geojsonPoly);
-
-        if (polyArea > largest.area) {
-          largest.area = polyArea;
-          largest.polygon = poly;
-        }
-      })
+      const largest = this.getArea(coords);
       this.createCenterMarker(largest.polygon, icon, countryName);
     }
   }
@@ -257,18 +263,17 @@ export class ScratchMap extends PolymerElement {
     const point = this.map.latLngToContainerPoint(latLng);
     const newPoint = L.point([point.x, point.y-0]);
     const centeredLatLng = this.map.containerPointToLatLng(newPoint);
-  
+
     const marker = L.marker(centeredLatLng, {icon: icon});  // Swap coordinates around
     this.markerLayer.addLayer(marker).addTo(this.map);
-
   }
 
   onEachCountryFeature(feature, layer) {
     const countryName = feature.properties.ADMIN
 
     if (this.sharedLength > 0) {
-      
-  
+
+
       const scratchedCountry = this.sharedCountryCodes.indexOf(countryName) > -1;
 
       if (scratchedCountry) {
@@ -276,10 +281,10 @@ export class ScratchMap extends PolymerElement {
       }
 
     } else {
-        
+
       // If it is a shared link, it is an interactive map
       // We register both click and touch support
-      const handle = function(event){ 
+      const handle = function(event){
 
         const mapSvg = layer._path;
 
@@ -289,8 +294,8 @@ export class ScratchMap extends PolymerElement {
         } else {
           mapSvg.classList.add("animateFill")
         }
-        
-        this.handleClick(event, feature, layer) 
+
+        this.handleClick(event, feature, layer)
       }.bind(this);
 
       layer.on('click', handle);
@@ -302,13 +307,13 @@ export class ScratchMap extends PolymerElement {
 
   handleClick(event, feature) {
     const countryFeature = event.target;
-    const countryCode = feature.properties.ADMIN; 
+    const countryCode = feature.properties.ADMIN;
     const visited = this.getVisited(countryCode);
-    
+
     if (visited === false || visited === null) {
       countryFeature.setStyle(this.scratchedCountriesStyle);
       this.setVisited(countryCode, "true");
-      
+
     } else {
       countryFeature.setStyle(this.countriesStyle);
       this.setVisited(countryCode, "false");
@@ -321,7 +326,7 @@ export class ScratchMap extends PolymerElement {
   styleFeature(feature) {
     const visited = this.getVisited(feature.properties.ADMIN);
     if (visited === false || visited === null) {
-        return this.countriesStyle; 
+        return this.countriesStyle;
     } else {
       return this.scratchedCountriesStyle;
     }
@@ -336,7 +341,7 @@ export class ScratchMap extends PolymerElement {
       this.countryCodes.forEach( (code) => {
         if (this.getVisited(code)) {
           this.visitedCountries += 1;
-        } 
+        }
       });
     }
 
@@ -345,19 +350,19 @@ export class ScratchMap extends PolymerElement {
 
   emitTotalChange() {
     document.dispatchEvent(new CustomEvent('totalCountries', {
-      detail : { totalCountries: this.totalCountries } 
+      detail : { totalCountries: this.totalCountries }
     }));
   }
 
   emitVisitedChange() {
     document.dispatchEvent(new CustomEvent('visitedCountries', {
-        detail : { visitedCountries: this.getVisitedCount() } 
+        detail : { visitedCountries: this.getVisitedCount() }
     }));
   }
 
   emitUrlChange() {
     document.dispatchEvent(new CustomEvent('visitedUrl', {
-        detail : { url: this.getUrl() } 
+        detail : { url: this.getUrl() }
     }));
   }
 
@@ -369,7 +374,7 @@ export class ScratchMap extends PolymerElement {
       return false
     }
   }
-  
+
   setVisited(countryCode, hasVisited) {
     localStorage.setItem(countryCode, hasVisited);
   }
@@ -379,7 +384,7 @@ export class ScratchMap extends PolymerElement {
     this.countryCodes.forEach( (code) => {
       if (this.getVisited(code)) {
         this.visitedCountriesList.push(code);
-      } 
+      }
     });
     return JSON.stringify(this.visitedCountriesList);
   }
@@ -398,16 +403,16 @@ export class ScratchMap extends PolymerElement {
       this.addLabel(label, ++i);
     });
     this.labelEngine.update();
-  
+
   }
-  
+
   addLabel(layer, id) {
-  
+
     // This is ugly but there is no getContainer method on the tooltip :(
     const label = layer.getElement();
     //layer.style.marginLeft = -(layer.innerText.length * 10);
     if (label) {
-  
+
       // We need the bounding rectangle of the label itself
       const rect = label.getBoundingClientRect();
 
@@ -418,7 +423,7 @@ export class ScratchMap extends PolymerElement {
         bottomLeft : [bottomLeft.lng, bottomLeft.lat],
         topRight   : [topRight.lng, topRight.lat]
       };
- 
+
       let weight = -parseInt(label.innerHTML.length);
       if (isNaN(weight)) {
         weight = 1;
@@ -433,14 +438,14 @@ export class ScratchMap extends PolymerElement {
         "Test " + id,
         false
       );
-  
+
       // If the label hasn't been added to the map already
       // add it and set the added flag to true
       if (!layer.added) {
         layer.addTo(this.map);
         layer.added = true;
       }
-  
+
     }
   }
 

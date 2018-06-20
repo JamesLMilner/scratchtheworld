@@ -1,4 +1,4 @@
-import {Element as PolymerElement}
+import {PolymerElement, html}
   from "../node_modules/@polymer/polymer/polymer-element.js"
 
 // Extend Polymer.Element base class
@@ -7,7 +7,7 @@ export class CountryCounter extends PolymerElement {
   static get is() { return 'country-counter' }
 
   static get template() {
-    return `<style>
+    return html`<style>
       #country-counter {
         width: 100%;
         height: 100%;
@@ -39,7 +39,7 @@ export class CountryCounter extends PolymerElement {
     this.total = 0;
     document.addEventListener('totalCountries', this.setTotalCountries.bind(this));
     document.addEventListener('visitedCountries', this.setVisitedCountries.bind(this));
-  } 
+  }
 
   setTotalCountries(data) {
     this.total = data.detail.totalCountries;

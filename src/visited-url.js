@@ -1,4 +1,4 @@
-import {Element as PolymerElement}
+import {PolymerElement, html}
   from "../node_modules/@polymer/polymer/polymer-element.js"
 
 // Extend Polymer.Element base class
@@ -7,7 +7,7 @@ export class VisitedUrl extends PolymerElement {
   static get is() { return 'visited-url' }
 
   static get template() {
-      return `
+      return html`
         <style>
 
         #url {
@@ -69,7 +69,7 @@ export class VisitedUrl extends PolymerElement {
           line-height: 1e;
           font-family: 'Lato', sans-serif;
         }
-    
+
       </style>
 
       <button id="web-share"> Share </button>
@@ -126,7 +126,7 @@ export class VisitedUrl extends PolymerElement {
     }
 
     document.addEventListener('visitedUrl', this.setUrl.bind(this));
-  } 
+  }
 
 
   refreshPage() {

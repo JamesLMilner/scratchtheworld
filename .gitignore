@@ -1,3 +1,4 @@
 node_modules/*
 !node_modules/leaflet/dist/leaflet.css
 !node_modules/@webcomponents/webcomponentsjs/*
+yarn-error.log

@@ -4,7 +4,9 @@
   "description": "Scratch",
   "main": "index.html",
   "scripts": {
-    "build": "webpack --config webpack.config.js"
+    "serve": "live-server",
+    "build": "webpack --config webpack.config.js",
+    "watch": "webpack --config webpack.config.js --watch"
   },
   "repository": "git+https://github.com/JamesMilnerUK/scratchmap.git",
   "keywords": [
@@ -19,15 +21,16 @@
   },
   "homepage": "https://github.com/JamesMilnerUK/scratchmap#readme",
   "dependencies": {
-    "@polymer/polymer": "next",
-    "@turf/area": "^5.1.5",
-    "@webcomponents/webcomponentsjs": "^1.1.0",
-    "labelgun": "^6.1.0",
-    "leaflet": "^1.3.1",
-    "polylabel": "^1.0.2",
-    "webpack": "beta"
+    "@polymer/polymer": "3.0.2",
+    "@turf/area": "6.0.1",
+    "@webcomponents/webcomponentsjs": "2.0.2",
+    "labelgun": "6.1.0",
+    "leaflet": "1.3.1",
+    "polylabel": "1.0.2"
   },
   "devDependencies": {
-    "webpack-cli": "^2.0.4"
+    "live-server": "^1.2.0",
+    "webpack": "4.12.0",
+    "webpack-cli": "3.0.8"
   }
 }
