@@ -14,19 +14,20 @@ module.exports = {
         filename: "main.js", // string
     },
     plugins: [
-    //   new UglifyJsPlugin({
-    //     sourceMap: true,
-    //     uglifyOptions: {
-    //         ecma: 6,
-    //         safari10: true,
-    //         // mangle: {
-    //         //     safari10: true,
-    //         // },
-    //         // output: {
-    //         //     safari10: true,
-    //         // }
-    //     },
+      new UglifyJsPlugin({
+        sourceMap: true,
+        uglifyOptions: {
+            ecma: 6,
+            mangle: false,
+            safari10: true
+            // mangle: {
+            //     safari10: true,
+            // },
+            // output: {
+            //     safari10: true,
+            // }
+        },
 
-    //   })
+      })
     ]
 }
